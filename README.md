@@ -83,6 +83,37 @@ You will also use [objects to power subscriptions](https://docs.knock.app/concep
 
 In our application, we manage this list of recipients in the `SetAlertForm` component. The `alerts/[alertId]/page.tsx` file loads the alert object, the current subscriptions, and a list of users to Knock. The `SetAlertForm` component then uses this data to keep track of which recipients are currently subscribed to the alert and which recipients have been removed.
 
+### Modeling batch windows
+
+In the `SetAlertForm` component, we use the `batchWindow` property to determine how often the alert should be triggered. This is done by setting the `frequency` property to one of the following values: `Immediately`, `Daily`, or `Weekly`.
+
+When the form is submitted, we use the `getFrequencyValue` function to convert the `frequency` property to a value that can be used in the Knock API. This is done by checking the value of the `frequency` property and returning the appropriate value:
+
+```javascript
+function getFrequencyValue(frequency: string) {
+  switch (frequency) {
+    case "Immediately":
+      return null;
+    case "Daily":
+      return {
+        frequency: "daily",
+        days: "weekdays",
+        hours: 17,
+      };
+    case "Weekly":
+      return {
+        frequency: "weekly",
+        days: ["fri"],
+        hours: 17,
+      };
+    default:
+      return null;
+  }
+}
+```
+
+The JSON values for 'Daily' and 'Weekly' are examples of creating a [dynamic batch window](https://docs.knock.app/designing-workflows/batch-function#set-a-dynamic-batch-window-using-a-variable) for your alert. This allows you to specify the time of day that the alert should be triggered and the days of the week that the alert should be triggered on.
+
 ## Triggering test events in Next.js with Knock workflows
 
 In this section, we will learn how to trigger test events from Next.js by utilizing Knock workflows. Knock workflows are triggered using an API request or SDK method call that contains a `recipient` that will receive the notification, payload `data` that can be used in the message template, as well as other optional properties like `tenant.`
