@@ -9,7 +9,7 @@ This example app builds on [this guide](https://docs.knock.app/guides/alerting) 
 To get started, you can clone this repository with the following command:
 
 ```bash
-git clone https://github.com/knocklabs/customer-facing-webhooks-example.git
+git clone https://github.com/knocklabs/alerting-example.git
 ```
 
 Next, you'll want to create a new copy of the `.env.sample` file to use in your project:
