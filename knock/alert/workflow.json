@@ -1,0 +1,173 @@
+{
+  "conditions": {
+    "all": [
+      {
+        "argument": "data.event",
+        "operator": "contains",
+        "variable": "data.alert.events"
+      }
+    ]
+  },
+  "name": "Alert",
+  "steps": [
+    {
+      "branches": [
+        {
+          "conditions": {
+            "all": [
+              {
+                "argument": "null",
+                "operator": "equal_to",
+                "variable": "data.alert.batchWindow"
+              }
+            ]
+          },
+          "name": "Branch 1",
+          "steps": [
+            {
+              "channel_key": "sendgrid",
+              "conditions": {
+                "all": [
+                  {
+                    "argument": "email",
+                    "operator": "contains",
+                    "variable": "data.alert.channels"
+                  }
+                ]
+              },
+              "ref": "email_1",
+              "template": {
+                "settings": {
+                  "layout_key": "default"
+                },
+                "subject": "New alert for event {{event}}",
+                "visual_blocks@": "email_1/visual_blocks.json"
+              },
+              "type": "channel"
+            },
+            {
+              "channel_key": "knock",
+              "conditions": {
+                "all": [
+                  {
+                    "argument": "in-app",
+                    "operator": "contains",
+                    "variable": "data.alert.channels"
+                  }
+                ]
+              },
+              "ref": "in_app_feed_1",
+              "template": {
+                "action_url": "",
+                "markdown_body@": "in_app_feed_1/markdown_body.md"
+              },
+              "type": "channel"
+            },
+            {
+              "channel_key": "twilio",
+              "conditions": {
+                "all": [
+                  {
+                    "argument": "sms",
+                    "operator": "contains",
+                    "variable": "data.alert.channels"
+                  }
+                ]
+              },
+              "ref": "sms_1",
+              "template": {
+                "text_body@": "sms_1/text_body.txt"
+              },
+              "type": "channel"
+            }
+          ],
+          "terminates": false
+        },
+        {
+          "name": "Default",
+          "steps": [
+            {
+              "ref": "batch_1",
+              "settings": {
+                "batch_key": "event",
+                "batch_order": "asc",
+                "batch_until_field_path": "data.alert.batchWindow",
+                "batch_window_type": "fixed"
+              },
+              "type": "batch"
+            },
+            {
+              "channel_key": "sendgrid",
+              "conditions": {
+                "all": [
+                  {
+                    "argument": "email",
+                    "operator": "contains",
+                    "variable": "data.alert.channels"
+                  }
+                ]
+              },
+              "ref": "email_2",
+              "template": {
+                "settings": {
+                  "layout_key": "default"
+                },
+                "subject": "{{total_activities}} new {{total_activities | pluralize: \"alert\", \"alerts\" }} {{total_activities | pluralize: \"was\", \"were\" }} trigged",
+                "visual_blocks@": "email_2/visual_blocks.json"
+              },
+              "type": "channel"
+            },
+            {
+              "channel_key": "knock",
+              "conditions": {
+                "all": [
+                  {
+                    "argument": "in-app",
+                    "operator": "contains",
+                    "variable": "data.alert.channels"
+                  }
+                ]
+              },
+              "ref": "in_app_feed_2",
+              "template": {
+                "action_url": "{{ vars.app_url }}",
+                "markdown_body@": "in_app_feed_2/markdown_body.md"
+              },
+              "type": "channel"
+            },
+            {
+              "channel_key": "twilio",
+              "conditions": {
+                "all": [
+                  {
+                    "argument": "sms",
+                    "operator": "contains",
+                    "variable": "data.alert.channels"
+                  }
+                ]
+              },
+              "ref": "sms_2",
+              "template": {
+                "text_body@": "sms_2/text_body.txt"
+              },
+              "type": "channel"
+            }
+          ],
+          "terminates": false
+        }
+      ],
+      "ref": "branch_1",
+      "type": "branch"
+    }
+  ],
+  "trigger_frequency": "every_trigger",
+  "__readonly": {
+    "environment": "development",
+    "key": "alert",
+    "active": true,
+    "valid": true,
+    "created_at": "2024-08-23T14:33:26.550301Z",
+    "updated_at": "2024-08-29T18:36:16.670257Z",
+    "sha": "dxoBUG/UvYnt2pOUjN7Y6okPt/Mq9E18d1460BmPh2E="
+  }
+}
