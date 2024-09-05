@@ -25,6 +25,20 @@ From here, you'll need to provide values for the following environment variables
 | KNOCK_ALERT_COLLECTION | This value will provide the name for your collection of alert configuration objects. You can use 'alerts' as a default if you're using this as a PoC |
 | KNOCK_ALERT_WORKFLOW_KEY | This value comes from Knock after you create the workflow that will generate your alert messages. |
 
+### Cloning the workflow
+
+There are two ways to clone the workflow we've created for this example app.
+
+1. You can clone the workflow from the Knock dashboard workflow template gallery by clicking the "Create workflow" from the "Workflows" page and then clicking "View templates" button in the bottom left corner. From there, you can click the "Alerts" workflow under the "Monitoring" category. For this example, you'll want to name this "Alert" with a key of "alert."
+2. You can clone the workflow from the command line using [the Knock CLI](https://docs.knock.app/developer-tools/knock-cli). To do this, run the following commands:
+
+```bash
+cd knock
+knock workflow push alert --commit -m "initial commit"
+```
+
+You can reference [the CLI docs](https://docs.knock.app/cli) for all of the available commands.
+
 ## Modeling alerts with objects in Knock
 
 In this section, we will explore how to model alerts using objects in Knock. In Knock, you can think of [Objects](https://docs.knock.app/concepts/objects) as a NoSQL data store for non-user entities. In other words, you can create JSON-shaped entities inside of collections that map to parts of your application's data model.
